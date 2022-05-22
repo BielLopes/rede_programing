@@ -17,7 +17,14 @@ void usage(int argc, char **argv)
     }
     exit(EXIT_FAILURE);
 }
+/*
+    A duas estuturas de dados utilizadas:
 
+    * message_type: respresenta as informações necessárias para qualquer menssagen que é entregue para o servidor.    
+    * storage_communication: o formato mais simples possível de se armazenar o estado de cada um dos 16 sensores possíveis e controlar a quantidade de sensores. (mesmo que existam 16 sensores distintos, apenas 15 podem ser instanciados)
+    
+    obs: mais informações na DOC
+*/
 struct message_type
 {
     int command;
@@ -34,6 +41,9 @@ struct storage_communication
 
 int just_numbers(char *validation, int is_equipment)
 {
+    /*
+        Essa função verifica se o Id enviado pelo cliente está em um formato válido
+    */
     if (is_equipment)
     {
         if (strlen(validation) != 3)
@@ -58,8 +68,11 @@ int just_numbers(char *validation, int is_equipment)
     return 0;
 }
 
-int validate_and_create_message(char *buf, int count, struct message_type *message, int csock)
+int validate_and_create_message(char *buf, struct message_type *message)
 {
+    /*
+        Essa função tem como objetivo verificar se a string de entrada pode ser convertida para a estrutura message_type a partir da manipulação da mesma.
+    */
     char *aux = (char *)malloc(sizeof(char) * BUFSZ);
     char *to_free = aux;
     strcpy(aux, buf);
@@ -83,7 +96,6 @@ int validate_and_create_message(char *buf, int count, struct message_type *messa
     }
     else
     {
-        close(csock);
         return -1;
     }
 
@@ -151,7 +163,7 @@ int validate_and_create_message(char *buf, int count, struct message_type *messa
         return 2;
     }
     int equipment_id = atoi(aux);
-    message->equipment = equipment_id;
+    message->equipment = equipment_id - 1;
     if (equipment_id <= 0 || equipment_id > 4)
     {
         return 2;
@@ -172,6 +184,9 @@ int validate_and_create_message(char *buf, int count, struct message_type *messa
 
 char *update_bd_and_create_response(struct message_type *message, struct storage_communication *storage)
 {
+    /*
+        O nome é super intuitivo, atualiza o estado dos sensores se necessário e forma a string de resposta para o cliente
+    */
     char *response = (char *)malloc(sizeof(char) * BUFSZ);
     response[0] = '\0';
     switch (message->command)
@@ -212,7 +227,7 @@ char *update_bd_and_create_response(struct message_type *message, struct storage
             }
 
             char aux[30];
-            sprintf(aux, "already exists in 0%d ", message->equipment);
+            sprintf(aux, "already exists in 0%d ", message->equipment + 1);
             strcat(response, aux);
         }
         else
@@ -243,7 +258,7 @@ char *update_bd_and_create_response(struct message_type *message, struct storage
                 }
 
                 char aux[30];
-                sprintf(aux, "already exists in 0%d ", message->equipment);
+                sprintf(aux, "already exists in 0%d ", message->equipment + 1);
                 strcat(response, aux);
             }
         }
@@ -280,7 +295,7 @@ char *update_bd_and_create_response(struct message_type *message, struct storage
             }
 
             char aux[30];
-            sprintf(aux, "does not exist in 0%d ", message->equipment);
+            sprintf(aux, "does not exist in 0%d ", message->equipment + 1);
             strcat(response, aux);
         }
         else
@@ -311,7 +326,7 @@ char *update_bd_and_create_response(struct message_type *message, struct storage
                 }
 
                 char aux[30];
-                sprintf(aux, "already exists in 0%d ", message->equipment);
+                sprintf(aux, "already exists in 0%d ", message->equipment + 1);
                 strcat(response, aux);
             }
         }
@@ -454,7 +469,7 @@ int main(int argc, char **argv)
             memset(buf, 0, BUFSZ);
             size_t count = recv(csock, buf, BUFSZ, 0);
             struct message_type message = {.command = -1, .equipment = -1, .lis_sensors = {-1, -1, -1, -1}, .list_sensors_length = 0};
-            int opcode = validate_and_create_message(buf, (int)count, &message, csock);
+            int opcode = validate_and_create_message(buf, &message);
 
             char *response = NULL;
 
