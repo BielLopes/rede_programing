@@ -6,11 +6,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 22 17:12:09 2022
+# Make data base, printed on Sun May 22 17:25:08 2022
 
 # Variables
 
 # 'override' directive
+ 
 GNUMAKEFLAGS := 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
@@ -274,7 +275,6 @@ GDK_BACKEND = x11
 LC_PAPER = pt_BR.UTF-8
 # environment
 LC_IDENTIFICATION = pt_BR.UTF-8
- 
 # environment
 QT_ACCESSIBILITY = 1
 # default
@@ -324,6 +324,7 @@ LANG = C
 # environment
 VSCODE_PID = 5617
 # variable set hash-table stats:
+ 
 # Load=156/1024=15%, Rehash=0, Collisions=28/187=15%
 
 # Pattern-specific Variable Values
@@ -370,7 +371,7 @@ all:
 #  recipe to execute (from 'Makefile', line 5):
 	gcc $(CFLAGS) -c common.c
 	gcc $(CFLAGS) client.c common.o -o client
-	gcc $(CFLAGS) server.c common.o -o server
+	gcc $(CFLAGS) server.c common.o  -o server
 
 # Not a target:
 .SUFFIXES:
@@ -381,7 +382,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-22 17:12:02.093116325
+#  Last modified 2022-05-22 17:24:54.467728197
 #  File has been updated.
 #  Successfully updated.
 
@@ -405,6 +406,6 @@ Makefile:
 # strcache performance: lookups = 28 / hit rate = 25%
 # hash-table stats:
 # Load=21/8192=0%, Rehash=0, Collisions=1/28=4%
-# Finished Make data base on Sun May 22 17:12:09 2022
+# Finished Make data base on Sun May 22 17:25:08 2022
 
  
