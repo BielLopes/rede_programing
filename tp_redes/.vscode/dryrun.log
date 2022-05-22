@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/gabriel/Downloads/Exemplo de aplicação clienteservidor-20220519/tp_redes'
+gcc -Wall -g -c common.c
+gcc -Wall -g client.c common.o -o client
+gcc -Wall -g server.c common.o -o server
+make: Leaving directory '/home/gabriel/Downloads/Exemplo de aplicação clienteservidor-20220519/tp_redes'
+ 

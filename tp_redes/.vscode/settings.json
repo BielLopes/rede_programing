@@ -1,0 +1,10 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+        "bitset": "c",
+        "chrono": "c",
+        "algorithm": "c",
+        "system_error": "cpp",
+        "sstream": "c"
+    }
+}
