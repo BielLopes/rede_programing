@@ -5,6 +5,7 @@
         "chrono": "c",
         "algorithm": "c",
         "system_error": "cpp",
-        "sstream": "c"
+        "sstream": "c",
+        "common.h": "c"
     }
 }

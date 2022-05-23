@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon May 23 10:28:37 2022
+# Make data base, printed on Mon May 23 10:38:48 2022
 
 # Variables
 
@@ -31,6 +31,7 @@ XDG_SESSION_TYPE = x11
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
+ 
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
 IM_CONFIG_PHASE = 1
@@ -285,7 +286,6 @@ VIRTUALENVWRAPPER_WORKON_CD = 1
 # environment
 LC_NUMERIC = pt_BR.UTF-8
 # automatic
- 
 <F = $(notdir $<)
 # environment
 VIRTUALENVWRAPPER_SCRIPT = /home/gabriel/.local/bin/virtualenvwrapper.sh
@@ -303,6 +303,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
+ 
 # environment
 SNAP_REEXEC = 
 # environment
@@ -324,7 +325,7 @@ LANG = C
 # environment
 VSCODE_PID = 5777
 # variable set hash-table stats:
-# Load=156/1024=15%, Rehash=0, Collisions=28/187=15%
+# Load=156/1024=15%, Rehash=0, Collisions=28/188=15%
 
 # Pattern-specific Variable Values
 
@@ -332,9 +333,9 @@ VSCODE_PID = 5777
 
 # Directories
 
-# . (device 2049, inode 10617877): 13 files, no impossibilities.
+# . (device 2049, inode 10617877): 15 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -366,11 +367,12 @@ all:
 # automatic
 # ? := 
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/14=7%
-#  recipe to execute (from 'Makefile', line 5):
+# Load=8/32=25%, Rehash=0, Collisions=1/15=7%
+#  recipe to execute (from 'Makefile', line 4):
 	gcc $(CFLAGS) -c common.c
+	gcc $(CFLAGS) -c application.c
 	gcc $(CFLAGS) client.c common.o -o client
-	gcc $(CFLAGS) server.c common.o  -o server
+	gcc $(CFLAGS) server.c common.o application.o -o server
 
 # Not a target:
 .SUFFIXES:
@@ -381,9 +383,16 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-22 17:24:54.467728197
+#  Last modified 2022-05-23 10:38:41.4317805
 #  File has been updated.
 #  Successfully updated.
+
+test: test.c
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 10):
+	gcc $(CFLAGS) test.c -o test
 
 # Not a target:
 .DEFAULT:
@@ -391,20 +400,26 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+test.c:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # files hash-table stats:
-# Load=4/1024=0%, Rehash=0, Collisions=0/16=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/19=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 18 / storage = 199 B / avg = 11 B
-# current buf: size = 8162 B / used = 199 B / count = 18 / avg = 11 B
+# strcache buffers: 1 (0) / strings = 22 / storage = 239 B / avg = 10 B
+# current buf: size = 8162 B / used = 239 B / count = 22 / avg = 10 B
 
-# strcache performance: lookups = 25 / hit rate = 28%
+# strcache performance: lookups = 30 / hit rate = 26%
 # hash-table stats:
-# Load=18/8192=0%, Rehash=0, Collisions=1/25=4%
-# Finished Make data base on Mon May 23 10:28:37 2022
+# Load=22/8192=0%, Rehash=0, Collisions=1/30=3%
+# Finished Make data base on Mon May 23 10:38:48 2022
 
  
