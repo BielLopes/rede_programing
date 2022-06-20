@@ -20,13 +20,13 @@ void * client_thread(void *data)
 {
     struct client_data *cdata = (struct client_data *)data;
 
-    char buf[BUFSZ];
+    MESSAGE* buf = NULL;
 
     while(1) {
         memset(buf, 0, BUFSZ);
         recv(cdata->csock, buf, BUFSZ, 0);
 
-        printf("[msg] recived from server: %s\n", buf);
+        printf("[msg] recived from server: %s\n", buf->payload);
     }    
 
     close(cdata->csock);
@@ -52,7 +52,11 @@ int main(int argc, char **argv)
     if (0 != connect(csock, addr, sizeof(storage)))
         logexit("connect");
 
-    char buf[BUFSZ];
+    MESSAGE* buf = NULL;
+
+    memset(buf, 0, BUFSZ);
+    recv(csock, buf, BUFSZ, 0);
+    printf("New ID: %s", buf->payload);
 
     struct client_data *tdata = malloc(sizeof(struct client_data));
     if (!tdata)
@@ -60,6 +64,7 @@ int main(int argc, char **argv)
 
     tdata->csock = csock;
     memcpy(&(tdata->storage), &storage, sizeof(storage));
+    tdata->equipement_id = 0; // TODO: replace 0 -> int(buf); is the id of the equipement
 
     pthread_t tid;
     pthread_create(&tid, NULL, client_thread, tdata);
@@ -67,12 +72,12 @@ int main(int argc, char **argv)
     while (1)
     {
         memset(buf, 0, BUFSZ); // Clean Buffer
-
+        char aux[100];
         // Read from keyboard the next command to server
-        printf("> ");
-        fgets(buf, BUFSZ - 1, stdin);
-        size_t count = send(csock, buf, strlen(buf)-1, 0);
-        if (count != strlen(buf)-1)
+        fgets(aux, 100, stdin);
+        buf = get_message_from_input(aux);
+        size_t count = send(csock, buf, BUFSZ, 0);
+        if (count != BUFSZ)
             logexit("send");
     }
 

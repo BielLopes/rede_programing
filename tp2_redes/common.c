@@ -1,3 +1,5 @@
+#include "common.h"
+
 #include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -108,4 +110,8 @@ int server_sockaddr_init(const char *proto, const char *portstr,
     }
 
     return 0;
+}
+
+MESSAGE* get_message_from_input(char aux[100]) {
+    return NULL;
 }

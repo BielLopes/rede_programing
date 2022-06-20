@@ -38,8 +38,9 @@ void * client_thread(void *data)
     size_t count = recv(cdata->csock, buf, BUFSZ, 0);
     printf("[msg] %s, %d bytes: %s\n", caddrstr, (int)count, buf);
 
-    sprintf(buf, "remote endpoint %.1000s\n", caddrstr);
-    count = send(cdata->csock, buf, strlen(buf) + 1, 0);
+    //sprintf(buf, "remote endpoint %.1000s\n", caddrstr);
+    MESSAGE test = {.id_destiny = 0, .id_msg = 0, .id_origen = 0, .payload = "Por favor, fala que funciona!"};
+    count = send(cdata->csock, &test, sizeof(test), 0);
     if (count != strlen(buf) + 1)
         logexit("send");
     close(cdata->csock);

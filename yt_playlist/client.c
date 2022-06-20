@@ -65,8 +65,8 @@ int main(int argc, char **argv)
     }
 
     close(s);
-
-    printf("recived %u bytes\n", total);
+    MESSAGE* message_recive = (MESSAGE*)buf;
+    printf("recived %s bytes\n", message_recive->payload);
     puts(buf);
 
     exit(EXIT_SUCCESS);

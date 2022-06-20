@@ -1,3 +1,4 @@
+#pragma once
 /*
     A duas estuturas de dados utilizadas:
 
