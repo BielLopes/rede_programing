@@ -1,5 +1,4 @@
 #include "common.h"
-#include "application.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,9 +18,10 @@ pthread_mutex_t mutexmsg;
 SERVER_STORAGE dstorage = {
                             .num_equipment = 0,
                             .ips_available = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            .csock_list = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            .csock_list = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1},
                             .requesting_data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .requesting_from = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            .to_delete = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .data_payload = ""
                           };
 
@@ -35,33 +35,59 @@ void usage(int argc, char **argv)
 void * listener_thread(void *data)
 {
     struct client_data *cdata = (struct client_data *)data;
-    struct sockaddr *caddr = (struct sockaddr *)(&cdata->storage);
+    char aux[100];
+    sprintf(aux, "%d", cdata->equipement_id+1);
+    printf("Equipment %s added\n", aux);
 
-    char caddrstr[BUFSZ];
-    addrtostr(caddr, caddrstr, BUFSZ);
-    printf("[log] connection from %s\n", caddrstr);
+    MESSAGE* buf = NULL;
+    size_t count = recv(cdata->csock, buf, BUFSZ, 0);
 
-    char buf[BUFSZ];
-    size_t count;
-
-    sprintf(buf, "New ID: %d\n", cdata->equipement_id+1);
-    count = send(cdata->csock, buf, strlen(buf) + 1, 0);
-    if (count != strlen(buf) + 1)
+    buf = malloc(BUFSZ);
+    sprintf(aux, "%d", cdata->equipement_id);
+    buf->id_msg = 3;
+    strcpy(buf->payload, aux);
+    count = send(cdata->csock, buf, BUFSZ, 0);
+    if (count != BUFSZ)
         logexit("send");
 
+    buf->id_msg = 6;
+    strcpy(buf->payload, create_server_ip_list(&dstorage));
+    count = send(cdata->csock, buf, BUFSZ, 0);
+    if (count != BUFSZ)
+        logexit("send");
+    free(buf->payload);
+    free(buf);
+
+    send_message_broadcast(&dstorage, cdata->equipement_id, 0);
+
     while(1) {
-        memset(buf, 0, BUFSZ);
         count = recv(cdata->csock, buf, BUFSZ, 0);
-        printf("[msg] %s, %d bytes: %s\n", caddrstr, (int)count, buf);
-
-        // printf("[info] Result strcmpn: %d\n", strcmp(buf, "send"));
-
-        if (0 == strcmp(buf, "send")) {
-            pthread_mutex_lock (&mutexmsg);
-            dstorage.requesting_data[cdata->equipement_id] = 1;
-            dstorage.requesting_from[1] = 1;
-            pthread_mutex_unlock (&mutexmsg);
+        switch (buf->id_msg)
+        {
+        case 2:
+            {
+                send_message_broadcast(&dstorage, cdata->equipement_id, 1);
+                pthread_mutex_lock (&mutexmsg);
+                dstorage.num_equipment--;
+                dstorage.ips_available[cdata->equipement_id] = 1;
+                dstorage.csock_list[cdata->equipement_id] = -1;
+                dstorage.to_delete[cdata->equipement_id] = 0;
+                pthread_mutex_unlock (&mutexmsg);
+                break;
+            }
+        case 5:
+            {
+                pthread_mutex_lock (&mutexmsg);
+                dstorage.requesting_data[buf->id_origen] = 1;
+                dstorage.requesting_from[buf->id_destiny] = 1;
+                pthread_mutex_unlock (&mutexmsg);
+                break;
+            }
         }
+        if (buf->id_msg == 2) {
+            break;
+        }
+        
     }    
 
     close(cdata->csock);
@@ -72,12 +98,8 @@ void * listener_thread(void *data)
 void * talker_thread(void *data)
 {
     struct client_data *cdata = (struct client_data *)data;
-    struct sockaddr *caddr = (struct sockaddr *)(&cdata->storage);
 
-    char caddrstr[BUFSZ];
-    addrtostr(caddr, caddrstr, BUFSZ);
-
-    char buf[BUFSZ];
+    MESSAGE* buf = malloc(BUFSZ);
     size_t count;
     int data_sended = 0;
 
@@ -88,9 +110,13 @@ void * talker_thread(void *data)
 
             int request_info_id;
             request_info_id = get_request_info_id(&dstorage);
-            sprintf(buf, "Value from %d: %.2f\n", request_info_id+1, atof(dstorage.data_payload));
-            count = send(cdata->csock, buf, strlen(buf) + 1, 0);
-            if (count != strlen(buf) + 1)
+            buf->id_msg = 6;
+            buf->id_origen = request_info_id;
+            buf->id_destiny = cdata->equipement_id;
+            strcpy(buf->payload, dstorage.data_payload);
+
+            count = send(cdata->csock, buf, BUFSZ, 0);
+            if (count != BUFSZ)
                 logexit("send");
 
             pthread_mutex_lock (&mutexmsg);
@@ -100,10 +126,12 @@ void * talker_thread(void *data)
             pthread_mutex_unlock (&mutexmsg);
             data_sended = 0;
 
-        } else if (dstorage.requesting_from[cdata->equipement_id] == 1 && data_sended == 0) {
-            sprintf(buf, "requested information\n");
-            count = send(cdata->csock, buf, strlen(buf) + 1, 0);
-            if (count != strlen(buf) + 1)
+        } 
+        if (dstorage.requesting_from[cdata->equipement_id] == 1 && data_sended == 0) {
+            buf->id_msg = 5;
+            buf->id_origen = cdata->equipement_id;
+            count = send(cdata->csock, buf, BUFSZ, 0);
+            if (count != BUFSZ)
                 logexit("send");
             
             char aux[10];
@@ -115,7 +143,15 @@ void * talker_thread(void *data)
             pthread_mutex_unlock (&mutexmsg);
             data_sended = 1;
         }
+        if (dstorage.to_delete[cdata->equipement_id] == 1) {
+            pthread_mutex_lock (&mutexmsg);
+            dstorage.to_delete[cdata->equipement_id] = 0;
+            pthread_mutex_unlock (&mutexmsg);
+            break;
+        }
     }
+
+    free(buf);
 
     pthread_exit(EXIT_SUCCESS);
 }
@@ -145,9 +181,9 @@ int main(int argc, char **argv)
     if (0 != listen(ssock, 10)) // 10 -> quantidade máxima de conexões pendentes
         logexit("listen");
 
-    char addrstr[BUFSZ];
-    addrtostr(addr, addrstr, BUFSZ);
-    printf("bound to %s, waiting connections\n", addrstr);
+    // char addrstr[BUFSZ];
+    // addrtostr(addr, addrstr, BUFSZ);
+    // printf("bound to %s, waiting connections\n", addrstr);
 
     pthread_mutex_init(&mutexmsg, NULL);
 
@@ -161,7 +197,7 @@ int main(int argc, char **argv)
         if (csock == -1)
             logexit("accept");
 
-        if (dstorage.num_equipment < MAXCLIENTS) { //TODO: Change max to MAXCLIENTS
+        if (dstorage.num_equipment < MAXCLIENTS) {
             struct client_data *tdata = malloc(sizeof(struct client_data));
             if (!tdata)
                 logexit("malloc");
@@ -178,11 +214,11 @@ int main(int argc, char **argv)
             dstorage.ips_available[free_id] = 1;
             dstorage.csock_list[free_id] = tdata->csock;
         } else {
-            char buf[BUFSZ];
-            memset(buf, 0, BUFSZ);
-            sprintf(buf, "Equipment limit exceeded\n");
-            size_t count = send(csock, buf, strlen(buf) + 1, 0);
-            if (count != strlen(buf) + 1)
+            MESSAGE* buf = malloc(BUFSZ);
+            buf->id_msg = 7;
+            strcpy(buf->payload, "Equipment limit exceeded");
+            size_t count = send(csock, buf, BUFSZ, 0);
+            if (count != BUFSZ)
                 logexit("send");
         }
     }

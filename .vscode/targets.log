@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 20 23:21:39 2022
+# Make data base, printed on Tue Jun 21 11:39:42 2022
 
 # Variables
 
@@ -16,8 +18,6 @@ GNUMAKEFLAGS :=
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
-# environment
-VIRTUALENVWRAPPER_PROJECT_FILENAME = .project
 # environment
 DESKTOP_SESSION = ubuntu
 # default
@@ -34,8 +34,6 @@ VSCODE_LOG_NATIVE = false
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
 IM_CONFIG_PHASE = 1
-# environment
-OGRE_RESOURCE_PATH = /usr/lib/x86_64-linux-gnu/OGRE-1.9.0
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
@@ -45,15 +43,15 @@ GDMSESSION = ubuntu
 # environment
 XMODIFIERS = @im=ibus
 # makefile
-CURDIR := /home/gabriel/Downloads/Exemplo de aplicação clienteservidor-20220519
+CURDIR := /home/gabriel/UFMG/rede_programing
 # makefile
 SHELL = /bin/sh
 # environment
-SNAP_DATA = /var/snap/code/97
+SNAP_DATA = /var/snap/code/99
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:82685
+JOURNAL_STREAM = 8:44526
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -67,63 +65,45 @@ MAKEFILE_LIST :=
 # environment
 GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-GAZEBO_PLUGIN_PATH = /home/gabriel/catkin_ws/build/storm_gazebo_magnet:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins::/home/gabriel/catkin_ws/build/ardupilot_gazebo
-# environment
 USERNAME = gabriel
 # environment
 MAKELEVEL := 0
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-ROS_ETC_DIR = /opt/ros/noetic/etc/ros
-# environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus,guid=8f0a3c79cf4dd038489b32e962851783
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-_ = /snap/code/97/usr/share/code/code
+_ = /snap/code/99/usr/share/code/code
 # environment
 LC_CTYPE = pt_BR.UTF-8
 # environment
-ROS_PACKAGE_PATH = /home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/catkin_simple:/home/gabriel/catkin_ws/src/ICUAS-2022-UAV-Competition/custom_msgs_srvs:/home/gabriel/catkin_ws/src/ICUAS-2022-UAV-Competition/drone_config:/home/gabriel/catkin_ws/src/ICUAS-2022-UAV-Competition/drone_controller:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/glog_catkin:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ros_gremsy/gremsy_base:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ros_gremsy/gremsy_bringup:/home/gabriel/catkin_ws/src/icuas22_competition:/home/gabriel/catkin_ws/src/larics_gazebo_worlds:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/mav_comm/mav_comm:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/mav_comm/mav_msgs:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ouster_os0_driver/ouster_client:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ouster_os0_driver/ouster_viz:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ouster_os0_driver/ouster_ros:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/mav_comm/planning_msgs:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/pozyx_ros:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_comm:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_control:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_description:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_evaluation:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_gazebo_plugins:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/ardupilot_gazebo:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_gazebo:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_joy_interface:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/rotors_simulator/rotors_simulator:/home/gabriel/catkin_ws/src/storm_gazebo_ros_magnet:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/topp_ros:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_msgs:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_lib:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_control:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_general:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_tests:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_tracker:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne:/home/gabriel/catkin_ws/src/velodyne_simulator/velodyne_description:/home/gabriel/catkin_ws/src/velodyne_simulator/velodyne_gazebo_plugins:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne_laserscan:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne_msgs:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne_driver:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne_pcl:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/velodyne/velodyne_pointcloud:/home/gabriel/catkin_ws/src/velodyne_simulator/velodyne_simulator:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/vrpn_catkin:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/ros_vrpn_client:/home/gabriel/catkin_ws/src/uav_ros_simulation/ros_packages/uav_ros_stack/ros_packages/uav_ros_drivers/ros_packages/zed_cpu_ros:/opt/ros/noetic/share
-# environment
-MANAGERPID = 13208
-# environment
-ROS_PYTHON_VERSION = 3
+MANAGERPID = 1462
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
-# environment
-LS_COLORS = 
 # environment
 LC_NAME = pt_BR.UTF-8
 # environment
 VSCODE_CWD = /home/gabriel
 # environment
-GAZEBO_MODEL_DATABASE_URI = http://models.gazebosim.org
-# environment
-GSETTINGS_SCHEMA_DIR = /snap/code/97/usr/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /snap/code/99/usr/share/glib-2.0/schemas
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /usr/lib/ccache:/home/gabriel/catkin_ws/src/uav_ros_simulation/.gitman/ardupilot/Tools/autotest:/opt/gcc-arm-none-eabi-6-2017-q2-update/bin:/home/gabriel/.local/bin:/opt/ros/foxy/bin:/home/gabriel/.local/bin:/usr/lib/ccache:/opt/ros/noetic/bin:/usr/lib/ccache:/home/gabriel/catkin_ws/src/uav_ros_simulation/.gitman/ardupilot/Tools/autotest:/opt/gcc-arm-none-eabi-6-2017-q2-update/bin:/home/gabriel/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/gabriel/catkin_ws/src/uav_ros_simulation/firmware/ardupilot/Tools/autotest
-# environment
-XDG_SESSION_DESKTOP = ubuntu
+PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/gabriel-IPMH110G:@/tmp/.ICE-unix/13444,unix/gabriel-IPMH110G:/tmp/.ICE-unix/13444
+SESSION_MANAGER = local/tcsindustrial:@/tmp/.ICE-unix/1726,unix/tcsindustrial:/tmp/.ICE-unix/1726
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/gabriel/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+SNAP = /snap/code/99
 # environment
-SNAP = /snap/code/97
-# environment
-ROS_ROOT = /opt/ros/noetic/share/ros
-# environment
-SNAP_VERSION = c3511e6c
+SNAP_VERSION = 30d9c6cd
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -133,41 +113,33 @@ DISABLE_WAYLAND = 1
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 328b701cb3f04792aee15e686bb6ddc1
+INVOCATION_ID = f5d99ee5d42048d58807ed4cafd9e082
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/97/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/99/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
-CMAKE_PREFIX_PATH = /home/gabriel/catkin_ws/devel:/opt/ros/noetic
+LS_COLORS = 
 # environment
-ROS_LOCALHOST_ONLY = 0
-# environment
-VIRTUALENVWRAPPER_HOOK_DIR = /home/gabriel/.virtualenvs
-# environment
-ROS_DISTRO = foxy
+XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 191935
+GIO_LAUNCHED_DESKTOP_FILE_PID = 3542
 # automatic
 %F = $(notdir $%)
 # environment
-DISPLAY = :0
+DISPLAY = :1
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 SNAP_INSTANCE_KEY = 
 # environment
-PWD = /home/gabriel/Downloads/Exemplo de aplicação clienteservidor-20220519
+PWD = /home/gabriel/UFMG/rede_programing
 # default
 .LOADED := 
 # environment
-GAZEBO_MASTER_URI = http://localhost:11345
-# environment
-SSH_AGENT_PID = 13393
-# environment
-PKG_CONFIG_PATH = /home/gabriel/catkin_ws/devel/lib/pkgconfig:/opt/ros/noetic/lib/pkgconfig:/opt/ros/noetic/lib/x86_64-linux-gnu/pkgconfig
+SSH_AGENT_PID = 1689
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -177,23 +149,19 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /home/gabriel
 # environment
-LD_LIBRARY_PATH = /opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib:/home/gabriel/catkin_ws/devel/lib:/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins::/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:
-# environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
-# environment
-AMENT_PREFIX_PATH = /opt/ros/foxy
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /home/gabriel/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /home/gabriel/.config/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 LOGNAME = gabriel
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # environment
-SNAP_CONTEXT = 15DHGp5RdnE2Kud725sXhPo3622RuPni4un5-KL_0dxv5_TwhCIx
+SNAP_CONTEXT = pVp4Hw414gPhedJfaCOxY-oR42suOgJeJyDvaaHAICZaQo9UFzBH
 # automatic
 +F = $(notdir $+)
 # environment
@@ -201,7 +169,7 @@ ELECTRON_NO_ATTACH_CONSOLE = 1
 # environment
 SNAP_USER_COMMON = /home/gabriel/snap/code/common
 # environment
-WORKON_HOME = /home/gabriel/.virtualenvs
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # environment
 GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 # automatic
@@ -212,34 +180,30 @@ LC_TIME = pt_BR.UTF-8
 SNAP_REAL_HOME = /home/gabriel
 # default
 MAKE = $(MAKE_COMMAND)
-# environment
-GAZEBO_RESOURCE_PATH = /usr/share/gazebo-11:/usr/share/gazebo-11:
 # default
 MAKECMDGOALS := all
 # environment
 QT_IM_MODULE = ibus
 # environment
-SNAP_USER_DATA = /home/gabriel/snap/code/97
+SNAP_USER_DATA = /home/gabriel/snap/code/99
 # environment
 SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-e7f3a830-bd55-4f33-af19-90395da6f772.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-f299e5bf-b553-4b38-93f1-745af0b5fe3f.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
 USER = gabriel
 # environment
-SNAP_REVISION = 97
+SNAP_REVISION = 99
 # environment
 LC_MONETARY = pt_BR.UTF-8
 # makefile
 .DEFAULT_GOAL := 
 # environment
 XDG_CURRENT_DESKTOP = Unity
-# environment
-ROSLISP_PACKAGE_DIRECTORIES = /home/gabriel/catkin_ws/devel/share/common-lisp
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
@@ -251,19 +215,15 @@ MAKE_COMMAND := make
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-06d0a0c8-1.67.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-06d0a0c8-1.68.1-main.sock
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
-# environment
-PYTHONPATH = /opt/ros/foxy/lib/python3.8/site-packages:/home/gabriel/catkin_ws/devel/lib/python3/dist-packages:/opt/ros/noetic/lib/python3/dist-packages
 # makefile
 MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
-# environment
-ROS_VERSION = 2
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
@@ -271,32 +231,25 @@ GDK_BACKEND = x11
 # environment
 LC_PAPER = pt_BR.UTF-8
 # environment
+LC_IDENTIFICATION = pt_BR.UTF-8
+# environment
 QT_ACCESSIBILITY = 1
 # default
- 
-make: *** No rule to make target 'all'.  Stop.
-
 MAKEFILES := 
 # environment
-SNAP_COOKIE = 15DHGp5RdnE2Kud725sXhPo3622RuPni4un5-KL_0dxv5_TwhCIx
-# environment
-VIRTUALENVWRAPPER_WORKON_CD = 1
+SNAP_COOKIE = pVp4Hw414gPhedJfaCOxY-oR42suOgJeJyDvaaHAICZaQo9UFzBH
 # environment
 LC_NUMERIC = pt_BR.UTF-8
 # automatic
 <F = $(notdir $<)
 # environment
-VIRTUALENVWRAPPER_SCRIPT = /home/gabriel/.local/bin/virtualenvwrapper.sh
-# environment
 LC_MEASUREMENT = pt_BR.UTF-8
-# environment
-ROS_MASTER_URI = http://localhost:11311
 # environment
 SNAP_NAME = code
 # environment
 LC_ALL = C
 # environment
-DBUS_STARTER_BUS_TYPE = session
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # automatic
 ^F = $(notdir $^)
 # default
@@ -306,13 +259,11 @@ SNAP_REEXEC =
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
-GAZEBO_MODEL_PATH = /usr/share/gazebo-11/models:/usr/share/gazebo-11/models:
-# environment
 WINDOWPATH = 2
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
-LC_IDENTIFICATION = pt_BR.UTF-8
+GJS_DEBUG_OUTPUT = stderr
 # default
 .RECIPEPREFIX := 
 # environment
@@ -320,11 +271,9 @@ LC_ADDRESS = pt_BR.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 191982
-# environment
-DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=8f0a3c79cf4dd038489b32e962851783
+VSCODE_PID = 3592
 # variable set hash-table stats:
-# Load=155/1024=15%, Rehash=0, Collisions=27/177=15%
+# Load=130/1024=13%, Rehash=0, Collisions=25/152=16%
 
 # Pattern-specific Variable Values
 
@@ -332,9 +281,9 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=8f0a3c79cf4dd038489b32e
 
 # Directories
 
-# . (device 2049, inode 9833256): 7 files, no impossibilities.
+# . (device 2051, inode 2361613): 11 files, no impossibilities.
 
-# 7 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -350,6 +299,7 @@ all:
 #  File has not been updated.
 
 # Not a target:
+ 
 Makefile:
 #  Implicit rule search has been done.
 #  File does not exist.
@@ -384,12 +334,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 15 / storage = 161 B / avg = 10 B
-# current buf: size = 8162 B / used = 161 B / count = 15 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 19 / storage = 197 B / avg = 10 B
+# current buf: size = 8162 B / used = 197 B / count = 19 / avg = 10 B
 
-# strcache performance: lookups = 18 / hit rate = 16%
+# strcache performance: lookups = 22 / hit rate = 13%
 # hash-table stats:
-# Load=15/8192=0%, Rehash=0, Collisions=1/18=6%
-# Finished Make data base on Fri May 20 23:21:39 2022
+# Load=19/8192=0%, Rehash=0, Collisions=1/22=5%
+# Finished Make data base on Tue Jun 21 11:39:42 2022
 
  

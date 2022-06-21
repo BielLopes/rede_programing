@@ -6,6 +6,8 @@
 #include <string.h>
 
 #include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
 void logexit(const char *msg)
 {
@@ -112,6 +114,117 @@ int server_sockaddr_init(const char *proto, const char *portstr,
     return 0;
 }
 
-MESSAGE* get_message_from_input(char aux[100]) {
-    return NULL;
+void create_message_from_input(MESSAGE* buf, char aux[100], int id) {
+    if (0 == strcmp(aux, "close connectiont")) {
+        buf->id_msg = 2;
+        buf->id_origen = id;
+    } else {
+        char* token = strtok(aux, " ");
+        for (int i = 0; i < 4; i++) {
+            token = strtok(NULL, " ");
+        }
+
+        buf->id_msg = 5;
+        buf->id_origen = id;
+        buf->id_destiny = atoi(token);
+    }
+}
+
+int get_available_id(const SERVER_STORAGE *dstorage) {
+    int indice;
+    for (indice = 0; indice < MAXCLIENTS; indice++) {
+        if (dstorage->ips_available[indice] == 0)
+            break;
+    }
+    return indice;
+}
+
+int get_request_info_id(const SERVER_STORAGE *dstorage) {
+    int indice;
+    for (indice = 0; indice < MAXCLIENTS; indice++)
+        if (dstorage->requesting_from[indice] == 1)
+            break;
+
+    return indice;
+}
+
+void send_message_broadcast(const SERVER_STORAGE* dstorage, int id, int type) {
+    // Type 0-> add; Type 1-> remove; 
+    MESSAGE* buf = malloc(BUFSZ);
+    buf->id_destiny = id;
+    char aux[100];
+    if (type) {
+        sprintf(aux, "Equipment %d removed", id);
+        buf->id_msg = 8;
+    } else {
+        sprintf(aux, "Equipment %d added", id);
+        buf->id_msg = 3;
+    }
+    strcpy(buf->payload, aux);
+
+
+    if (type)
+    for (int i = 0; i < MAXCLIENTS; i++) {
+        if (dstorage->ips_available[i] == 0 && i != id) {
+            size_t count = send(dstorage->csock_list[i], buf, BUFSZ, 0);
+            if (count != BUFSZ)
+                logexit("send");
+        }
+    }
+}
+
+char* create_server_ip_list(const SERVER_STORAGE* dstorage) {
+    char* list = malloc(sizeof(char)*100);
+    char aux[5];
+    int started = 0;
+    for (int i = 0; i < MAXCLIENTS; i++) {
+        if (dstorage->ips_available[i] == 0) {
+            if (started == 0) {
+                memset(list, 0, 100);
+                sprintf(list, "%d", i);
+                started = 1;
+            } else {
+                memset(aux, 0, 5);
+                sprintf(aux, " %d", i);
+                strcat(list, aux);
+            }
+        }
+    }
+    return list;
+}
+
+void initialize_server_ip_list(int id_list[MAXCLIENTS], char* ids, pthread_mutex_t* mutexlist) {
+    char* token = strtok(ids, " ");
+    int indice = 0;
+    int list_indice[MAXCLIENTS];
+    while (token != NULL) {
+        list_indice[indice] = atoi(token);
+        token = strtok(NULL, " ");
+        indice++;
+    }
+    indice = 0;
+    for (int i = 0; i < MAXCLIENTS; i++) {
+        for (int k = 0; k < MAXCLIENTS; k++) {
+            if (list_indice[indice] == k) {
+                pthread_mutex_lock(mutexlist);
+                id_list[k] = 1;
+                pthread_mutex_unlock(mutexlist);
+                indice++;
+                break;
+            }
+        }
+    }
+}
+
+void update_server_ip_list(int id_list[MAXCLIENTS], int id, int type, pthread_mutex_t* mutexlist) {
+    // Type 0-> add; Type 1-> remove;
+    if (type) {
+        pthread_mutex_lock(mutexlist);
+        id_list[id] = 0;
+        pthread_mutex_unlock(mutexlist);
+    } else {
+        pthread_mutex_lock(mutexlist);
+        id_list[id] = 1;
+        pthread_mutex_unlock(mutexlist);
+    }
 }
