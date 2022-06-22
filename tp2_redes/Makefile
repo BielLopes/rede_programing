@@ -1,4 +1,9 @@
+CFLAGS = -Wall -g
+
 all:
-	gcc -Wall -c common.c
-	gcc -Wall -pthread client.c common.o -o client
-	gcc -Wall -pthread server-mt.c common.o -o server-mt
+	gcc $(CFLAGS) -c common.c
+	gcc $(CFLAGS) -pthread client.c common.o -o client
+	gcc $(CFLAGS) -pthread server.c common.o -o server
+
+clean:
+	rm common.o client server

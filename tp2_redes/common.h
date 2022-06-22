@@ -32,7 +32,7 @@ typedef struct {
     char data_payload[100];
 } SERVER_STORAGE;
 
-void create_message_from_input(MESSAGE* buf, char aux[100], int id);
+int create_message_from_input(MESSAGE* buf, char aux[100], int id);
 
 int get_available_id(const SERVER_STORAGE *dstorage);
 
@@ -51,7 +51,4 @@ void logexit(const char *msg);
 int addrparse(const char *addrstr, const char *portstr,
               struct sockaddr_storage *storage);
 
-void addrtostr(const struct sockaddr *addr, char *str, size_t strsize);
-
-int server_sockaddr_init(const char *proto, const char *portstr,
-                         struct sockaddr_storage *storage);
+int server_sockaddr_init(const char *portstr, struct sockaddr_storage *storage);

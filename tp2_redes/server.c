@@ -15,10 +15,11 @@
 pthread_t callThd[MAXCLIENTS][THREADSPERCLIENT];
 pthread_mutex_t mutexmsg;
 
+int data_sended = 0;
 SERVER_STORAGE dstorage = {
                             .num_equipment = 0,
                             .ips_available = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            .csock_list = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1},
+                            .csock_list = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
                             .requesting_data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .requesting_from = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .to_delete = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -39,29 +40,30 @@ void * listener_thread(void *data)
     sprintf(aux, "%d", cdata->equipement_id+1);
     printf("Equipment %s added\n", aux);
 
-    MESSAGE* buf = NULL;
-    size_t count = recv(cdata->csock, buf, BUFSZ, 0);
+    MESSAGE* buf = malloc(BUFSZ);
+    // size_t count = recv(cdata->csock, buf, BUFSZ, 0);
+    // printf("Esta recebendo: %s", buf->payload);
 
-    buf = malloc(BUFSZ);
     sprintf(aux, "%d", cdata->equipement_id);
     buf->id_msg = 3;
     strcpy(buf->payload, aux);
-    count = send(cdata->csock, buf, BUFSZ, 0);
+    size_t count = send(cdata->csock, buf, BUFSZ, 0);
     if (count != BUFSZ)
         logexit("send");
 
-    buf->id_msg = 6;
-    strcpy(buf->payload, create_server_ip_list(&dstorage));
+    buf->id_msg = 4;
+    char* server_ip_list = create_server_ip_list(&dstorage);
+    strcpy(buf->payload, server_ip_list);
     count = send(cdata->csock, buf, BUFSZ, 0);
     if (count != BUFSZ)
         logexit("send");
-    free(buf->payload);
-    free(buf);
-
+    free(server_ip_list);
+    
     send_message_broadcast(&dstorage, cdata->equipement_id, 0);
 
     while(1) {
         count = recv(cdata->csock, buf, BUFSZ, 0);
+        // printf("O tipo de mensagem recebida:");
         switch (buf->id_msg)
         {
         case 2:
@@ -69,14 +71,24 @@ void * listener_thread(void *data)
                 send_message_broadcast(&dstorage, cdata->equipement_id, 1);
                 pthread_mutex_lock (&mutexmsg);
                 dstorage.num_equipment--;
-                dstorage.ips_available[cdata->equipement_id] = 1;
+                dstorage.ips_available[cdata->equipement_id] = 0;
                 dstorage.csock_list[cdata->equipement_id] = -1;
-                dstorage.to_delete[cdata->equipement_id] = 0;
+                dstorage.to_delete[cdata->equipement_id] = 1;
                 pthread_mutex_unlock (&mutexmsg);
+                printf("Equipment %d removed\n", cdata->equipement_id + 1);
                 break;
             }
         case 5:
             {
+                if (dstorage.ips_available[buf->id_destiny] == 0) {
+                    printf("Equipment %d not found\n", buf->id_destiny + 1);
+                    buf->id_msg = 7;
+                    buf->id_destiny = cdata->equipement_id;
+                    strcpy(buf->payload, "Target equipment not found");
+                    count = send(cdata->csock, buf, BUFSZ, 0);
+                    if (count != BUFSZ)
+                        logexit("send");
+                }
                 pthread_mutex_lock (&mutexmsg);
                 dstorage.requesting_data[buf->id_origen] = 1;
                 dstorage.requesting_from[buf->id_destiny] = 1;
@@ -90,8 +102,6 @@ void * listener_thread(void *data)
         
     }    
 
-    close(cdata->csock);
-
     pthread_exit(EXIT_SUCCESS);
 }
 
@@ -101,7 +111,6 @@ void * talker_thread(void *data)
 
     MESSAGE* buf = malloc(BUFSZ);
     size_t count;
-    int data_sended = 0;
 
     while(1) {
         if (dstorage.requesting_data[cdata->equipement_id] == 1) {
@@ -114,18 +123,17 @@ void * talker_thread(void *data)
             buf->id_origen = request_info_id;
             buf->id_destiny = cdata->equipement_id;
             strcpy(buf->payload, dstorage.data_payload);
-
+            
             count = send(cdata->csock, buf, BUFSZ, 0);
             if (count != BUFSZ)
                 logexit("send");
-
+            
             pthread_mutex_lock (&mutexmsg);
             dstorage.requesting_data[cdata->equipement_id] = 0;
             dstorage.requesting_from[request_info_id] = 0;
             strcpy(dstorage.data_payload, "");
-            pthread_mutex_unlock (&mutexmsg);
             data_sended = 0;
-
+            pthread_mutex_unlock (&mutexmsg);
         } 
         if (dstorage.requesting_from[cdata->equipement_id] == 1 && data_sended == 0) {
             buf->id_msg = 5;
@@ -140,13 +148,20 @@ void * talker_thread(void *data)
 
             pthread_mutex_lock (&mutexmsg);
             strcpy(dstorage.data_payload, aux);
-            pthread_mutex_unlock (&mutexmsg);
             data_sended = 1;
+            pthread_mutex_unlock (&mutexmsg);
         }
         if (dstorage.to_delete[cdata->equipement_id] == 1) {
             pthread_mutex_lock (&mutexmsg);
             dstorage.to_delete[cdata->equipement_id] = 0;
             pthread_mutex_unlock (&mutexmsg);
+            buf->id_msg = 8;
+            buf->id_destiny = cdata->equipement_id;
+            strcpy(buf->payload, "Successful removal");
+            count = send(cdata->csock, buf, BUFSZ, 0);
+            if (count != BUFSZ)
+                logexit("send");
+            close(cdata->csock);
             break;
         }
     }
@@ -158,11 +173,11 @@ void * talker_thread(void *data)
 
 int main(int argc, char **argv)
 {
-    if (argc < 3)
+    if (argc < 2)
         usage(argc, argv);
 
     struct sockaddr_storage storage;
-    if (0 != server_sockaddr_init(argv[1], argv[2], &storage))
+    if (0 != server_sockaddr_init(argv[1], &storage))
         usage(argc, argv);
 
     int ssock;
@@ -178,12 +193,8 @@ int main(int argc, char **argv)
     if (0 != bind(ssock, addr, sizeof(storage)))
         logexit("bind");
 
-    if (0 != listen(ssock, 10)) // 10 -> quantidade máxima de conexões pendentes
+    if (0 != listen(ssock, 30)) // 30 -> quantidade máxima de conexões pendentes
         logexit("listen");
-
-    // char addrstr[BUFSZ];
-    // addrtostr(addr, addrstr, BUFSZ);
-    // printf("bound to %s, waiting connections\n", addrstr);
 
     pthread_mutex_init(&mutexmsg, NULL);
 
