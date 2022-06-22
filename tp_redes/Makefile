@@ -8,3 +8,6 @@ all:
 
 test: test.c
 	gcc $(CFLAGS) test.c -o test
+
+clean:
+	rm common.o application.o client server
