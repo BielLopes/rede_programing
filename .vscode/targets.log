@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun 21 23:16:10 2022
+# Make data base, printed on Sat Jun 25 11:31:20 2022
 
 # Variables
 
@@ -51,7 +51,7 @@ SNAP_DATA = /var/snap/code/99
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:46321
+JOURNAL_STREAM = 8:45184
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # environment
@@ -69,6 +69,8 @@ USERNAME = gabriel
 # environment
 MAKELEVEL := 0
 # environment
+MANDATORY_PATH = /usr/share/gconf/ubuntu.mandatory.path
+# environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
 ROS_ETC_DIR = /opt/ros/noetic/etc/ros
@@ -83,7 +85,7 @@ LC_CTYPE = pt_BR.UTF-8
 # environment
 ROS_PACKAGE_PATH = /opt/ros/noetic/share
 # environment
-MANAGERPID = 1475
+MANAGERPID = 1411
 # environment
 ROS_PYTHON_VERSION = 3
 # environment
@@ -103,7 +105,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/tcsindustrial:@/tmp/.ICE-unix/1738,unix/tcsindustrial:/tmp/.ICE-unix/1738
+SESSION_MANAGER = local/tcsindustrial:@/tmp/.ICE-unix/1678,unix/tcsindustrial:/tmp/.ICE-unix/1678
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -123,7 +125,7 @@ DISABLE_WAYLAND = 1
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = b6edfef82063417e9b9012c0e6a0117c
+INVOCATION_ID = b70c372dbaf848b1a132bcf3af8c3815
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/99/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # default
@@ -137,7 +139,7 @@ ROS_DISTRO = noetic
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3073
+GIO_LAUNCHED_DESKTOP_FILE_PID = 6187
 # automatic
 %F = $(notdir $%)
 # environment
@@ -151,7 +153,7 @@ PWD = /home/gabriel/UFMG/rede_programing
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1702
+SSH_AGENT_PID = 1641
 # environment
 PKG_CONFIG_PATH = /opt/ros/noetic/lib/pkgconfig
 # environment
@@ -207,7 +209,7 @@ SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-43ceb4d1-46e4-41f6-a65d-788c741706f1.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-19850af1-d7eb-47df-ab80-7552e0a7c765.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -256,7 +258,8 @@ LC_PAPER = pt_BR.UTF-8
 LC_IDENTIFICATION = pt_BR.UTF-8
 # environment
 QT_ACCESSIBILITY = 1
- 
+# environment
+DEFAULTS_PATH = /usr/share/gconf/ubuntu.default.path
 # default
 MAKEFILES := 
 # environment
@@ -296,9 +299,10 @@ LC_ADDRESS = pt_BR.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 3129
+ 
+VSCODE_PID = 6237
 # variable set hash-table stats:
-# Load=142/1024=14%, Rehash=0, Collisions=26/164=16%
+# Load=144/1024=14%, Rehash=0, Collisions=26/166=16%
 
 # Pattern-specific Variable Values
 
@@ -364,6 +368,6 @@ GNUmakefile:
 # strcache performance: lookups = 22 / hit rate = 13%
 # hash-table stats:
 # Load=19/8192=0%, Rehash=0, Collisions=1/22=5%
-# Finished Make data base on Tue Jun 21 23:16:10 2022
+# Finished Make data base on Sat Jun 25 11:31:20 2022
 
  

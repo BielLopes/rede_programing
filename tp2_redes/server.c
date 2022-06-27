@@ -10,9 +10,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#define THREADSPERCLIENT 2
-
-pthread_t callThd[MAXCLIENTS][THREADSPERCLIENT];
+pthread_t callThd[MAXCLIENTS];
 pthread_mutex_t mutexmsg;
 
 int data_sended = 0;
@@ -28,8 +26,8 @@ SERVER_STORAGE dstorage = {
 
 void usage(int argc, char **argv)
 {
-    printf("usage: ./%s <v4|v6> <server port>\n", argv[0]);
-    printf("exemple: ./%s v4 51511\n", argv[0]);
+    printf("usage: ./%s <server port>\n", argv[0]);
+    printf("exemple: ./%s 51511\n", argv[0]);
     exit(EXIT_FAILURE);
 }
 
@@ -73,9 +71,17 @@ void * listener_thread(void *data)
                 dstorage.num_equipment--;
                 dstorage.ips_available[cdata->equipement_id] = 0;
                 dstorage.csock_list[cdata->equipement_id] = -1;
-                dstorage.to_delete[cdata->equipement_id] = 1;
+                // dstorage.to_delete[cdata->equipement_id] = 1;
                 pthread_mutex_unlock (&mutexmsg);
                 printf("Equipment %d removed\n", cdata->equipement_id + 1);
+                
+                buf->id_msg = 8;
+                buf->id_destiny = cdata->equipement_id;
+                strcpy(buf->payload, "Successful removal");
+                count = send(cdata->csock, buf, BUFSZ, 0);
+                if (count != BUFSZ)
+                    logexit("send");
+
                 break;
             }
         case 5:
@@ -88,85 +94,44 @@ void * listener_thread(void *data)
                     count = send(cdata->csock, buf, BUFSZ, 0);
                     if (count != BUFSZ)
                         logexit("send");
+                } else {
+                    buf->id_msg = 5;
+                    count = send(dstorage.csock_list[buf->id_destiny], buf, BUFSZ, 0);
+                    if (count != BUFSZ)
+                        logexit("send");
+                    
+                    while (0 == strcmp(dstorage.data_payload, ""))
+                        continue; // espera até o equipamento escrever os dados
+
+                    buf->id_msg = 6;
+                    buf->id_origen = buf->id_destiny;
+                    buf->id_destiny = cdata->equipement_id;
+                    strcpy(buf->payload, dstorage.data_payload);
+                    count = send(cdata->csock, buf, BUFSZ, 0);
+                    if (count != BUFSZ)
+                        logexit("send");
+
+                    pthread_mutex_lock (&mutexmsg);
+                    strcpy(dstorage.data_payload, "");
+                    pthread_mutex_unlock (&mutexmsg);
                 }
+                break;
+            }
+            case 6:
+            {
                 pthread_mutex_lock (&mutexmsg);
-                dstorage.requesting_data[buf->id_origen] = 1;
-                dstorage.requesting_from[buf->id_destiny] = 1;
+                strcpy(dstorage.data_payload, buf->payload);
                 pthread_mutex_unlock (&mutexmsg);
                 break;
             }
         }
         if (buf->id_msg == 2) {
+            free(buf);
+            close(cdata->csock);
             break;
         }
         
     }    
-
-    pthread_exit(EXIT_SUCCESS);
-}
-
-void * talker_thread(void *data)
-{
-    struct client_data *cdata = (struct client_data *)data;
-
-    MESSAGE* buf = malloc(BUFSZ);
-    size_t count;
-
-    while(1) {
-        if (dstorage.requesting_data[cdata->equipement_id] == 1) {
-            while (0 == strcmp(dstorage.data_payload, ""))
-                continue; // espera até o equipamento escrever os dados
-
-            int request_info_id;
-            request_info_id = get_request_info_id(&dstorage);
-            buf->id_msg = 6;
-            buf->id_origen = request_info_id;
-            buf->id_destiny = cdata->equipement_id;
-            strcpy(buf->payload, dstorage.data_payload);
-            
-            count = send(cdata->csock, buf, BUFSZ, 0);
-            if (count != BUFSZ)
-                logexit("send");
-            
-            pthread_mutex_lock (&mutexmsg);
-            dstorage.requesting_data[cdata->equipement_id] = 0;
-            dstorage.requesting_from[request_info_id] = 0;
-            strcpy(dstorage.data_payload, "");
-            data_sended = 0;
-            pthread_mutex_unlock (&mutexmsg);
-        } 
-        if (dstorage.requesting_from[cdata->equipement_id] == 1 && data_sended == 0) {
-            buf->id_msg = 5;
-            buf->id_origen = cdata->equipement_id;
-            count = send(cdata->csock, buf, BUFSZ, 0);
-            if (count != BUFSZ)
-                logexit("send");
-            
-            char aux[10];
-            srand((unsigned int)time(NULL));
-            sprintf(aux, "%.2f ", ((float)rand() / (float)(RAND_MAX)) * 10.);
-
-            pthread_mutex_lock (&mutexmsg);
-            strcpy(dstorage.data_payload, aux);
-            data_sended = 1;
-            pthread_mutex_unlock (&mutexmsg);
-        }
-        if (dstorage.to_delete[cdata->equipement_id] == 1) {
-            pthread_mutex_lock (&mutexmsg);
-            dstorage.to_delete[cdata->equipement_id] = 0;
-            pthread_mutex_unlock (&mutexmsg);
-            buf->id_msg = 8;
-            buf->id_destiny = cdata->equipement_id;
-            strcpy(buf->payload, "Successful removal");
-            count = send(cdata->csock, buf, BUFSZ, 0);
-            if (count != BUFSZ)
-                logexit("send");
-            close(cdata->csock);
-            break;
-        }
-    }
-
-    free(buf);
 
     pthread_exit(EXIT_SUCCESS);
 }
@@ -218,8 +183,7 @@ int main(int argc, char **argv)
             int free_id = get_available_id(&dstorage);
             tdata->equipement_id = free_id;
 
-            pthread_create(&callThd[free_id][0], NULL, listener_thread, tdata);
-            pthread_create(&callThd[free_id][1], NULL, talker_thread, tdata);
+            pthread_create(&callThd[free_id], NULL, listener_thread, tdata);
 
             dstorage.num_equipment++;
             dstorage.ips_available[free_id] = 1;

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 
 int my_list[MAXCLIENTS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int to_exit = 0;
@@ -12,11 +13,8 @@ pthread_mutex_t mutexlist;
 
 void usage(int argc, char **argv)
 {
-    if (argc >= 4)
-    {
-        printf("usage: ./%s <server IP> <server port>\n", argv[0]);
-        printf("exemple: ./%s 127.0.0.1 51511\n", argv[0]);
-    }
+    printf("usage: ./%s <server IP> <server port>\n", argv[0]);
+    printf("exemple: ./%s 127.0.0.1 51511\n", argv[0]);
     exit(EXIT_FAILURE);
 }
 
@@ -40,6 +38,14 @@ void * client_thread(void *data)
             break;
         case 5:
             printf("requested information\n");
+            buf->id_msg = 6;
+            buf->id_origen = buf->id_destiny;
+            buf->id_origen = cdata->equipement_id;
+            srand((unsigned int)time(NULL));
+            sprintf(buf->payload, "%.2f ", ((float)rand() / (float)(RAND_MAX)) * 10.);
+            size_t count = send(cdata->csock, buf, BUFSZ, 0);
+                if (count != BUFSZ)
+                    logexit("send");
             break;
         case 6:
             printf("Value from %d: %s\n", buf->id_origen + 1, buf->payload);
