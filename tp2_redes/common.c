@@ -103,15 +103,6 @@ int get_available_id(const SERVER_STORAGE *dstorage) {
     return indice;
 }
 
-int get_request_info_id(const SERVER_STORAGE *dstorage) {
-    int indice;
-    for (indice = 0; indice < MAXCLIENTS; indice++)
-        if (dstorage->requesting_from[indice] == 1)
-            break;
-
-    return indice;
-}
-
 void send_message_broadcast(const SERVER_STORAGE* dstorage, int id, int type) {
     // Type 0-> add; Type 1-> remove; 
     MESSAGE* buf = malloc(BUFSZ);

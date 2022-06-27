@@ -47,7 +47,7 @@ void * client_thread(void *data)
                 if (count != BUFSZ)
                     logexit("send");
             break;
-        case 6:
+        case 6: // Info requested
             printf("Value from %d: %s\n", buf->id_origen + 1, buf->payload);
             break;
         case 7: // Target equipment not founded

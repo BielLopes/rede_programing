@@ -18,9 +18,6 @@ SERVER_STORAGE dstorage = {
                             .num_equipment = 0,
                             .ips_available = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .csock_list = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-                            .requesting_data = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            .requesting_from = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            .to_delete = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             .data_payload = ""
                           };
 
@@ -71,7 +68,6 @@ void * listener_thread(void *data)
                 dstorage.num_equipment--;
                 dstorage.ips_available[cdata->equipement_id] = 0;
                 dstorage.csock_list[cdata->equipement_id] = -1;
-                // dstorage.to_delete[cdata->equipement_id] = 1;
                 pthread_mutex_unlock (&mutexmsg);
                 printf("Equipment %d removed\n", cdata->equipement_id + 1);
                 

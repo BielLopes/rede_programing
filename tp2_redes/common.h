@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include <arpa/inet.h>
 
+#define MAXCLIENTS 15
+
 typedef struct {
     int id_msg;
     int id_origen;
@@ -20,23 +22,16 @@ struct client_data
     int equipement_id;
 };
 
-#define MAXCLIENTS 15
-
 typedef struct {
     int num_equipment;
     int ips_available[MAXCLIENTS];
     int csock_list[MAXCLIENTS];
-    int requesting_data[MAXCLIENTS];
-    int requesting_from[MAXCLIENTS];
-    int to_delete[MAXCLIENTS];
     char data_payload[100];
 } SERVER_STORAGE;
 
 int create_message_from_input(MESSAGE* buf, char aux[100], int id);
 
 int get_available_id(const SERVER_STORAGE *dstorage);
-
-int get_request_info_id(const SERVER_STORAGE *dstorage);
 
 void send_message_broadcast(const SERVER_STORAGE* dstorage, int id, int type);
 
